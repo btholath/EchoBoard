@@ -40,3 +40,14 @@ npm notice
 ## github setup
 git init
 git remote add origin https://github.com/btholath/EchoBoard.git
+git add .
+git commit -m "Initial commit"
+git push -u origin main
+git remote -v
+
+## Add .gitignore for Vite ReactJs app
+
+
+## Add React Router to the app
+@btholath ➜ /workspaces/EchoBoard/echoboard-front-end (main) $ npm install react-router-dom@6.4
+
