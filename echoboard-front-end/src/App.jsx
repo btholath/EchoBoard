@@ -9,6 +9,7 @@ import AboutPage from './pages/AboutPage';
 import ArticlePage from './pages/ArticlePage';
 import ArticlesListPage from './pages/ArticlesListPage';
 import Layout from './pages/Layout';
+import NotFoundPage from './pages/NotFoundPage';
 
 
 // <Layout /> will be always rendered, and the appropriate child component (<HomePage />, <AboutPage />, etc.) will be 
@@ -18,11 +19,16 @@ const routes = [
   {
     path: '/',
     element: <Layout />,  // This will wrap all the children below
+    errorElement: <NotFoundPage />,  // This will be shown if no route matches
+    // This is a fallback UI that will be displayed when no matching route is found.
     children: [
       { path: '/', element: <HomePage /> },
       { path: '/about', element: <AboutPage /> },
       { path: '/articles', element: <ArticlesListPage /> },
-      { path: '/articles/individual', element: <ArticlePage /> },
+      { path: '/articles/:name', element: <ArticlePage /> },  // the :name part is a dynamic segment
+      // This means that if you navigate to /articles/some-article, the ArticlePage component will be rendered
+      // and the name parameter will be set to "some-article"
+      // You can access this parameter in the ArticlePage component using the useParams() hook from react-router-dom
     ]
   }
 ];
