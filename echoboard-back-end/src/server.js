@@ -20,17 +20,27 @@ app.use(express.urlencoded({ extended: true }));
 config();
 const PORT = process.env.PORT || 3000;
 
+let db;
+let client;
+
+async function connect_to_db() {
+    const uri = 'mongodb://127.0.0.1:27017';
+    client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
+    try {
+        await client.connect();
+        db = client.db('echoboard-db');
+        console.log('Connected to MongoDB');
+    } catch (err) {
+        console.error('MongoDB connection error:', err);
+        process.exit(1); // Exit app if DB connection fails
+    }
+}
+
 
 app.get('/api/articles/:name', async (req, res) => {
     const { name } = req.params;
-    const uri = 'mongodb://127.0.0.1:27017';
-    const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
-
     try {
-        await client.connect();
-        const db = client.db('echoboard-db');
         const article = await db.collection('articles').findOne({ name });
-
         if (article) {
             res.json(article);
         } else {
@@ -40,7 +50,7 @@ app.get('/api/articles/:name', async (req, res) => {
         console.error(err);
         res.status(500).send('Something went wrong');
     } finally {
-        await client.close();
+        console.log('Request completed');
     }
 });
 
@@ -60,7 +70,7 @@ app.post('/hello', (req, res) => {
 });
 
 
-app.post('/api/articles/:name/upvote', (req, res) => {
+app.post('/api/articles/:name/upvote-v1', (req, res) => {
     const { name } = req.params;
     const article = articleInfo.find(article => article.name === name);
     if (article) {
@@ -72,6 +82,29 @@ app.post('/api/articles/:name/upvote', (req, res) => {
         res.status(404).send('Article not found');
     }
 });
+
+
+app.post('/api/articles/:name/upvote', async (req, res) => {
+    
+    try {
+        const { name } = req.params;
+        const updatedArticle = await db.collection('articles').findOneAndUpdate(
+            { name },
+            { $inc: { upvotes: 1 } },
+            { returnDocument: 'after' } // or { returnOriginal: false } in older drivers
+        );
+
+        if (updatedArticle) {
+            res.json(updatedArticle);
+        } else {
+            res.status(404).send('Article not found');
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error upvoting article');
+    }
+});
+
 
 
 app.post('/api/articles/:name/comment', (req, res) => {
@@ -87,8 +120,11 @@ app.post('/api/articles/:name/comment', (req, res) => {
     }
 });
 
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+async function start(){
+    await connect_to_db().catch(console.error);
+    app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    });
 }
-);
+
+start().catch(console.error);
