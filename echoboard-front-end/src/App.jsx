@@ -13,6 +13,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import axios from 'axios';
 
 
+
 // <Layout /> will be always rendered, and the appropriate child component (<HomePage />, <AboutPage />, etc.) will be 
 // inserted inside it via <Outlet /
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams, useLoaderData } from 'react-router-dom';
 import axios from 'axios';
 import articles from '../article-content';
+import CommentsList from './CommentsList';
 
 export default function ArticlePage() {
   const { name } = useParams();
@@ -14,21 +15,31 @@ export default function ArticlePage() {
     return <h2>Article not found</h2>;
   }
 
+
+  async function onUpvoteClicked() {
+    const response = await axios.post(`/api/articles/${name}/upvote`);
+    const { upvotes } = response.data;
+    console.log(`Article ${name} now has ${upvotes} upvotes!`);
+  }
   return (
-    <div>
+    <>
       <h1>{article.title}</h1>
+      <button onClick={}>Upvote</button>
       <p>This article has {upvotes} upvotes!</p>
 
       {article.content.map((paragraph, index) => (
         <p key={index}>{paragraph}</p>
       ))}
 
-      <h3>Comments</h3>
-      <ul>
-        {comments.map((c, i) => (
-          <li key={i}>{c.text}</li>
-        ))}
-      </ul>
-    </div>
+      <CommentsList comments={comments} />
+    </>
   );
+}
+
+
+
+export async function loader({ params }) {
+  const response = await axios.get(`/api/articles/${params.name}`);
+  const { upvotes, comments } = response.data;
+  return { upvotes, comments };
 }
