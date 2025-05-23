@@ -6,7 +6,7 @@ import {
 import './App.css';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
-import ArticlePage from './pages/ArticlePage';
+import ArticlePage, { loader as articleLoader } from './pages/ArticlePage';
 import ArticlesListPage from './pages/ArticlesListPage';
 import Layout from './pages/Layout';
 import NotFoundPage from './pages/NotFoundPage';
@@ -32,11 +32,7 @@ const routes = [{
   }, {
     path: '/articles/:name', // -> /articles/learn-react
     element: <ArticlePage />,
-    loader: async function({params}) {
-      const response = await axios.get('/api/articles/' + params.name);
-      const {upvotes, comments} = response.data;
-      return {upvotes, comments};
-    },
+    loader: articleLoader,
   }]
 }]
 
@@ -52,7 +48,6 @@ const routes = [{
   Enables navigation, route matching, rendering components based on the URL  
 */
 const router = createBrowserRouter(routes);
-
 
 function App() {
   return (
