@@ -156,6 +156,22 @@ echoboard-db> db.articles.insertMany( [
   }
 }
 echoboard-db> db.articles.find({}).pretty()
-echoboard-db> db.articles.findOne({name: "learn-node"}).pretty()
 
+echoboard-db> db.articles.findOne({name: "learn-node"})
+{
+  _id: ObjectId('6830b6d50d2ff2b79cc59f35'),
+  name: 'learn-node',
+  upvotes: 0,
+  comments: []
+}
+echoboard-db> 
+
+echoboard-db> db.articles.findOne({"upvotes": 0})
+{
+  _id: ObjectId('6830b6d50d2ff2b79cc59f35'),
+  name: 'learn-node',
+  upvotes: 0,
+  comments: []
+}
+echoboard-db> 
 
