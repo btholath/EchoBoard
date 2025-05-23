@@ -181,3 +181,6 @@ echoboard-db> db.articles.find({"upvotes": 0})
 ## Install Mongodb driver into our app to use from Express within our backend-app
 @btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ npm install mongodb
 
+
+## Install axios in front-end app to connect to APIs
+@btholath ➜ /workspaces/EchoBoard/echoboard-front-end (main) $ npm install axios

@@ -1,5 +1,5 @@
 // import a react hook
-import { useParams } from "react-router-dom";
+import { useParams, useLoaderData } from "react-router-dom";
 import articles from "../article-content";
 
 // This component will be rendered when the user navigates to /articles/:name
@@ -15,10 +15,13 @@ export default function ArticlePage() {
     const { name } = useParams(); // This will give you the name of the article from the URL
     // The name variable will contain the value of the name parameter from the URL
 
+    const {upvotes, comments} = useLoaderData();
+
     const article = articles.find((article) => article.name === name);
     return (
         <>
         <h1>{article.title}</h1>
+        <p>This article has {upvotes} upvotes!</p>
 
         <p>{article.content.map((paragraph, index) => {
             return (

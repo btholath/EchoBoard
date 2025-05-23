@@ -10,28 +10,35 @@ import ArticlePage from './pages/ArticlePage';
 import ArticlesListPage from './pages/ArticlesListPage';
 import Layout from './pages/Layout';
 import NotFoundPage from './pages/NotFoundPage';
+import axios from 'axios';
 
 
 // <Layout /> will be always rendered, and the appropriate child component (<HomePage />, <AboutPage />, etc.) will be 
 // inserted inside it via <Outlet /
 
-const routes = [
-  {
+const routes = [{
+  path: '/',
+  element: <Layout />,
+  errorElement: <NotFoundPage />,
+  children: [{
     path: '/',
-    element: <Layout />,  // This will wrap all the children below
-    errorElement: <NotFoundPage />,  // This will be shown if no route matches
-    // This is a fallback UI that will be displayed when no matching route is found.
-    children: [
-      { path: '/', element: <HomePage /> },
-      { path: '/about', element: <AboutPage /> },
-      { path: '/articles', element: <ArticlesListPage /> },
-      { path: '/articles/:name', element: <ArticlePage /> },  // the :name part is a dynamic segment
-      // This means that if you navigate to /articles/some-article, the ArticlePage component will be rendered
-      // and the name parameter will be set to "some-article"
-      // You can access this parameter in the ArticlePage component using the useParams() hook from react-router-dom
-    ]
-  }
-];
+    element: <HomePage />
+  }, {
+    path: '/about',
+    element: <AboutPage />
+  }, {
+    path: '/articles',
+    element: <ArticlesListPage />
+  }, {
+    path: '/articles/:name', // -> /articles/learn-react
+    element: <ArticlePage />,
+    loader: async function({params}) {
+      const response = await axios.get('/api/articles/' + params.name);
+      const {upvotes, comments} = response.data;
+      return {upvotes, comments};
+    },
+  }]
+}]
 
 
 //It creates a browser-based router instance using the HTML5 History API, based on the routes array you've defined.
