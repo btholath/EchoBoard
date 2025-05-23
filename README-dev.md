@@ -175,3 +175,9 @@ echoboard-db> db.articles.findOne({"upvotes": 0})
 }
 echoboard-db> 
 
+echoboard-db> db.articles.find({"upvotes": 0})
+
+
+## Install Mongodb driver into our app to use from Express within our backend-app
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ npm install mongodb
+

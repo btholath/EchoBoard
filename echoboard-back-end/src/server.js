@@ -1,8 +1,10 @@
+
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { config } from 'dotenv';
+import {MongoClient, ServerApiVersion} from 'mongodb';
 
 const articleInfo = [
     {name: 'learn-node', upvotes:0, comments: []},
@@ -17,6 +19,31 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 config();
 const PORT = process.env.PORT || 3000;
+
+
+app.get('/api/articles/:name', async (req, res) => {
+    const { name } = req.params;
+    const uri = 'mongodb://127.0.0.1:27017';
+    const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
+
+    try {
+        await client.connect();
+        const db = client.db('echoboard-db');
+        const article = await db.collection('articles').findOne({ name });
+
+        if (article) {
+            res.json(article);
+        } else {
+            res.status(404).send('Article not found');
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Something went wrong');
+    } finally {
+        await client.close();
+    }
+});
+
 
 
 app.get('/hello', (req, res) => {
