@@ -107,7 +107,7 @@ app.post('/api/articles/:name/upvote', async (req, res) => {
 
 
 
-app.post('/api/articles/:name/comment', (req, res) => {
+app.post('/api/articles/:name/comment-v1', (req, res) => {
     const { name } = req.params;
     const { postedBy, text } = req.body;
     const article = articleInfo.find(article => article.name === name);
@@ -119,6 +119,33 @@ app.post('/api/articles/:name/comment', (req, res) => {
         res.status(404).send('Article not found');
     }
 });
+
+
+app.post('/api/articles/:name/comments', async(req, res) => {
+    const { name } = req.params;
+    const { postedBy, text } = req.body;
+    const newComment = { postedBy, text };
+
+    const updatedArticle = await db.collection('articles').findOneAndUpdate(
+        { name },
+        { $push: { comments: newComment } },
+        { returnDocument: 'after' }
+    );
+
+    try {
+    if (updatedArticle) {
+        res.json(updatedArticle);
+    } else {
+        res.status(404).send('Article not found');
+    }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error adding comment');
+    }
+});
+
+
+
 
 async function start(){
     await connect_to_db().catch(console.error);
