@@ -1,3 +1,6 @@
+import React from 'react';
+
+/*
 export default function CommentsList({ comments }) {
   return (
     <>
@@ -9,5 +12,16 @@ export default function CommentsList({ comments }) {
       </div>
     ))}
     </>
+  );
+}
+*/
+
+export default function CommentsList({ comments }) {
+  return (
+    <ul>
+      {comments.map((comment, index) => (
+        <li key={index}>{comment.text}</li>  
+      ))}
+    </ul>
   );
 }
