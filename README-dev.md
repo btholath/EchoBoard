@@ -142,19 +142,18 @@ test>
 test> use echoboard-db
 switched to db echoboard-db
 
-echoboard-db> db.articles.insertMany( [
-...     {name: 'learn-node', upvotes:0, comments: []},
-...     {name: 'learn-react', upvotes:0, comments: []},
-...     {name: 'mongodb', upvotes:0, comments: []},
-... ])
-{
-  acknowledged: true,
-  insertedIds: {
-    '0': ObjectId('6830b6d50d2ff2b79cc59f35'),
-    '1': ObjectId('6830b6d50d2ff2b79cc59f36'),
-    '2': ObjectId('6830b6d50d2ff2b79cc59f37')
-  }
-}
+// 1. Delete all existing records from 'articles' collection
+db.articles.deleteMany({})
+
+// 2. Insert new records
+echoboard-db> 
+db.articles.insertMany([
+  { name: 'learn-node', upvotes: 0, comments: [] },
+  { name: 'learn-react', upvotes: 0, comments: [] },
+  { name: 'mongodb', upvotes: 0, comments: [] }
+])
+
+
 echoboard-db> db.articles.find({}).pretty()
 
 echoboard-db> db.articles.findOne({name: "learn-node"})
