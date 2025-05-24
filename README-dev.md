@@ -183,3 +183,52 @@ echoboard-db> db.articles.find({"upvotes": 0})
 
 ## Install axios in front-end app to connect to APIs
 @btholath ➜ /workspaces/EchoBoard/echoboard-front-end (main) $ npm install axios
+
+
+
+
+## Setup Firebase project
+### echoboard-b994f
+. Create Firebase Project
+In the Firebase Console:
+Go to https://console.firebase.google.com
+Click “Add project”
+Enable Google Analytics if desired
+After setup, go to Authentication → Sign-in method
+Enable Email/Password
+
+
+##Add Firebase to your web app
+
+Use npm
+
+Use a <script> tag
+If you're already using npm and a module bundler such as webpack or Rollup, you can run the following command to install the latest SDK (Learn more):
+
+@btholath ➜ /workspaces/EchoBoard/echoboard-front-end (main) $ npm install firebase
+
+
+Then, initialize Firebase and begin using the SDKs for the products you'd like to use.
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCo-FjJFd_oEss_s6EPtxr6y8xOsAdbAUI",
+  authDomain: "echoboard-b994f.firebaseapp.com",
+  projectId: "echoboard-b994f",
+  storageBucket: "echoboard-b994f.firebasestorage.app",
+  messagingSenderId: "460081465840",
+  appId: "1:460081465840:web:5773d6ff95583863a9f535"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+Note: This option uses the modular JavaScript SDK, which provides reduced SDK size.
+
+Learn more about Firebase for web: Get Started, Web SDK API Reference, Samples
+
+
