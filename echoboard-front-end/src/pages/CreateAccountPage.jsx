@@ -11,20 +11,24 @@ export default function CreateAccountPage() {
 
     const navigate = useNavigate();
     
-    async function logIn(){
+    async function createAccount(){
         try{
+            if (password !== confirmPassword) {
+                setError('Passwords do not match.');
+                return;
+            }
             const auth = getAuth();
-            await signInWithEmailAndPassword(auth, email, password);
+            await createUserWithEmailAndPassword(auth, email, password);
             navigate('/articles');
         } catch (e) {
-            console.error('Login failed:', e);
-            setError('Login failed. Please check your email and password.');
+            console.error('Create Account failed:', e);
+            setError('Create Account failed. Please check your email and password.');
         }
     }
 
     return (
         <>
-        <h1>Log In</h1>
+        <h1>Create Account</h1>
         {error && <p>{error}</p>}
    
         <input
@@ -45,7 +49,7 @@ export default function CreateAccountPage() {
             onChange={e => setConfirmPassword(e.target.value)} />
 
 
-        <button onClick={logIn}>Log In</button>
+        <button onClick={createAccount}>Create Account</button>
         <Link to='/create-account'>Don't have an account? Create one here</Link>
         </>
     );
