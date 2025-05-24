@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-export default function ArticleList({ articles }) {
+export default function ArticlesList({ articles }) {
   return (
     <>
     {articles.map(a => (

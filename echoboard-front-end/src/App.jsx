@@ -1,16 +1,15 @@
 import {
-  createBrowserRouter,  //Creates a router that uses the HTML5 history API (for browser URLs like /home)
-  RouterProvider        // Wraps your application with the routing context using the router created by createBrowserRouter
+  createBrowserRouter,
+  RouterProvider,
 } from 'react-router-dom'
 import axios from 'axios';
-import './App.css';
-import HomePage from './pages/HomePage';
+import './App.css'
+import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage';
-import ArticlePage, { loader as articleLoader } from './pages/ArticlePage';
 import ArticlesListPage from './pages/ArticlesListPage';
-import Layout from './pages/Layout';
+import ArticlePage, { loader as articleLoader } from './pages/ArticlePage';
+import Layout from './Layout';
 import NotFoundPage from './pages/NotFoundPage';
-
 
 const routes = [{
   path: '/',
@@ -32,7 +31,6 @@ const routes = [{
   }]
 }]
 
-
 const router = createBrowserRouter(routes);
 
 function App() {
@@ -43,4 +41,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
