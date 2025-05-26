@@ -84,54 +84,58 @@ app.post('/hello', (req, res) => {
 });
 
 
-app.post('/api/articles/:name/upvote-v1', (req, res) => {
-    const { name } = req.params;
-    const article = articleInfo.find(article => article.name === name);
-    if (article) {
-        article.upvotes += 1;
-        res.status(200).send(`Article ${name} now has ${article.upvotes} upvotes, hooray!`);
-        res.send(`Article ${name} now has ${article.upvotes} upvotes!`);
-        res.json(article);
-    } else {
-        res.status(404).send('Article not found');
-    }
+// Protecting endpoints using Firebase Admin SDK
+app.use(async function(req, res, next) {
+  const { authtoken } = req.headers;
+
+  if (authtoken) {
+    const user = await admin.auth().verifyIdToken(authtoken);
+    req.user = user;
+    next();
+  } else {
+    res.sendStatus(400);
+  }
 });
+
 
 
 app.post('/api/articles/:name/upvote', async (req, res) => {
-    
-    try {
-        const { name } = req.params;
-        const updatedArticle = await db.collection('articles').findOneAndUpdate(
-            { name },
-            { $inc: { upvotes: 1 } },
-            { returnDocument: 'after' } // or { returnOriginal: false } in older drivers
-        );
+  const { name } = req.params;
+  const { uid } = req.user;
 
-        if (updatedArticle) {
-            res.json(updatedArticle);
-        } else {
-            res.status(404).send('Article not found');
-        }
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error upvoting article');
-    }
+  const article = await db.collection('articles').findOne({ name });
+
+  const upvoteIds = article.upvoteIds || [];
+  const canUpvote = uid && !upvoteIds.includes(uid);
+
+  if (canUpvote) {
+    const updatedArticle = await db.collection('articles').findOneAndUpdate({ name }, {
+      $inc: { upvotes: 1 },
+      $push: { upvoteIds: uid },
+    }, {
+      returnDocument: "after",
+    });
+
+    res.json(updatedArticle);
+  } else {
+    res.sendStatus(403);
+  }
 });
 
 
 
-app.post('/api/articles/:name/comment-v1', (req, res) => {
-    const { name } = req.params;
-    const { postedBy, text } = req.body;
-    const article = articleInfo.find(article => article.name === name);
-    if (article) {
-        article.comments.push({postedBy, text});
-        //res.status(200).send(`Comment added to article ${name}`);
-        res.json(article);
-    } else {
-        res.status(404).send('Article not found');
-    }
+app.post('/api/articles/:name/comments', async (req, res) => {
+  const { name } = req.params;
+  const { postedBy, text } = req.body;
+  const newComment = { postedBy, text };
+
+  const updatedArticle = await db.collection('articles').findOneAndUpdate({ name }, {
+    $push: { comments: newComment }
+  }, {
+    returnDocument: 'after',
+  });
+
+  res.json(updatedArticle);
 });
 
 
@@ -159,13 +163,11 @@ app.post('/api/articles/:name/comments', async(req, res) => {
 });
 
 
-
-
-async function start(){
-    await connect_to_db().catch(console.error);
-    app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    });
+async function start() {
+  await connect_to_db();
+  app.listen(3000, function() {
+    console.log('Server is listening on port 3000');
+  });
 }
 
-start().catch(console.error);
+start();
