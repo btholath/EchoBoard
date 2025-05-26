@@ -108,7 +108,9 @@ Current Mongosh Log ID: 6830b575879419a633c59f34
 Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.1
 MongoNetworkError: connect ECONNREFUSED 127.0
 
-//This launches MongoDB and uses ~/data/db for data storage.
+
+
+## This launches MongoDB and uses ~/data/db for data storage.
 @btholath ➜ /workspaces/EchoBoard (main) mkdir -p ~/data/db
 @btholath ➜ /workspaces/EchoBoard (main) mongod --dbpath ~/data/db
 
@@ -232,3 +234,11 @@ Note: This option uses the modular JavaScript SDK, which provides reduced SDK si
 Learn more about Firebase for web: Get Started, Web SDK API Reference, Samples
 
 
+Create Account failed: FirebaseError: Firebase: Error (auth/configuration-not-found).
+    at createErrorInternal (assert.ts:146:55)
+    at _fail (assert.ts:65:9)
+    at _performFetchWithErrorHandling (index.ts:243:9)
+    at async _performSignInRequest (index.ts:264:26)
+    at async createUserWithEmailAndPassword (email_and_password.ts:302:20)
+    at async createAccount (CreateAccountPage.jsx:21:13)
+    
