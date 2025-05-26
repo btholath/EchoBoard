@@ -5,13 +5,27 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { config } from 'dotenv';
 import {MongoClient, ServerApiVersion} from 'mongodb';
+import admin from 'firebase-admin';
+import fs from 'fs';
 
+// Initialize Firebase Admin SDK
+const credentials = JSON.parse(
+    fs.readFileSync('./credentials.json', 'utf8')
+)
+
+
+admin.initializeApp({
+  credential: admin.credential.cert(credentials)
+});
+
+
+/*
 const articleInfo = [
     {name: 'learn-node', upvotes:0, comments: []},
     {name: 'learn-react', upvotes:0, comments: []},
     {name: 'mongodb', upvotes:0, comments: []},
 ]
-
+*/
 
 const app = express();
 app.use(cors());

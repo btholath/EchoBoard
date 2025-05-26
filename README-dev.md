@@ -241,4 +241,6 @@ Create Account failed: FirebaseError: Firebase: Error (auth/configuration-not-fo
     at async _performSignInRequest (index.ts:264:26)
     at async createUserWithEmailAndPassword (email_and_password.ts:302:20)
     at async createAccount (CreateAccountPage.jsx:21:13)
-    
+
+## Add Firebase Auth to Node.js (backend)
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ npm install firebase-admin

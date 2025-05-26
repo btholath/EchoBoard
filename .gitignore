@@ -42,3 +42,6 @@ storybook-static/
 
 # System files
 Thumbs.db
+
+echoboard-back-end/credentials.json
+# Ignore specific files in the back-end
