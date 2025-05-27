@@ -46,4 +46,5 @@ Thumbs.db
 echoboard-back-end/credentials.json
 # Ignore specific files in the back-end
 
-echoboard-back-end/dist
+# You dont need to version control built files
+/dist

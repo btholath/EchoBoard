@@ -8,6 +8,14 @@ import {MongoClient, ServerApiVersion} from 'mongodb';
 import admin from 'firebase-admin';
 import fs from 'fs';
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+
 // Initialize Firebase Admin SDK
 const credentials = JSON.parse(
     fs.readFileSync('./credentials.json', 'utf8')
@@ -32,7 +40,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 config();
-const PORT = process.env.PORT || 3000;
+
 
 let db;
 let client;
@@ -49,6 +57,13 @@ async function connect_to_db() {
         process.exit(1); // Exit app if DB connection fails
     }
 }
+
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// when api calls do not begin with/api, serve the index.html file
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
 
 
 app.get('/api/articles/:name', async (req, res) => {
@@ -163,11 +178,14 @@ app.post('/api/articles/:name/comments', async(req, res) => {
 });
 
 
+const PORT = process.env.PORT || 8000;
+
 async function start() {
   await connect_to_db();
-  app.listen(3000, function() {
-    console.log('Server is listening on port 3000');
+  app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
   });
 }
 
 start();
+

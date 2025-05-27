@@ -244,3 +244,88 @@ Create Account failed: FirebaseError: Firebase: Error (auth/configuration-not-fo
 
 ## Add Firebase Auth to Node.js (backend)
 @btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ npm install firebase-admin
+
+
+## Host ReactJS application in Google Cloud ( from development mode to production-ready) deployment.
+### prepare app for release
+
+1. Build the React Frontend
+- This creates a dist/ folder (or build/ if CRA).
+- It contains static production files (HTML, JS, CSS) optimized for deployment.
+
+@btholath ➜ /workspaces/EchoBoard (main) $ cd echoboard-front-end
+@btholath ➜ /workspaces/EchoBoard/echoboard-front-end (main) $ npm run build
+
+> echoboard-front-end@0.0.0 build
+> vite build
+
+vite v5.4.19 building for production...
+✓ 111 modules transformed.
+dist/index.html                   0.46 kB │ gzip:   0.29 kB
+dist/assets/index-DFTIUlFQ.css    1.32 kB │ gzip:   0.64 kB
+dist/assets/index-CHJGx839.js   400.06 kB │ gzip: 111.63 kB
+✓ built in 2.50s
+
+
+2. Move dist/ into the Backend
+@btholath ➜ /workspaces/EchoBoard/echoboard-front-end (main) $ mv dist ../echoboard-back-end/dist
+
+Then, update .gitignore in the backend:
+/dist
+
+3. Serve dist/ with Express
+Update your server.js
+
+🔁 Add this at the top:
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+Serve static files and fallback route:
+Add this below your API routes:
+app.use(express.static(path.join(__dirname, '../dist')));
+
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
+
+This will serve the static frontend from Express for non-API routes.
+^\/(?!api).* is a regex: it matches anything not starting with /api.
+
+
+4. Use Dynamic Port Binding
+Update your PORT logic:
+const PORT = process.env.PORT || 8000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+Result:
+Now:
+Your frontend and backend are served from the same Express server.
+You no longer need to run npm run dev for the frontend.
+This makes deploying to platforms like Render, Railway, Google Cloud, or Heroku much easier.
+
+
+### setting up hosting for MongoDB
+To complete the release:
+
+Switch from mongodb://127.0.0.1:27017 to a hosted MongoDB URI.
+
+Use MongoDB Atlas and store the URI in .env:
+MONGO_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/echoboard-db
+
+Then in code
+const uri = process.env.MONGO_URI;
+
+
+### Set environment variables
+
+### Deploy application
+
+
+## Shutdown app in Google cloud.

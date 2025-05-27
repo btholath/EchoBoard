@@ -24,7 +24,6 @@ export default function ArticlePage() {
     const headers = token ? { authtoken: token } : {};
     console.log('Headers:', headers);
 
-
     const response = await axios.post('/api/articles/' + name + '/upvote', null, {headers});
     const updatedArticleData = response.data;
     setUpvotes(updatedArticleData.upvotes);
