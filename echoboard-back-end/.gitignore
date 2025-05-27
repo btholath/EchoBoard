@@ -51,3 +51,4 @@ echoboard-back-end/credentials.json
 
 echoboard-back-end/dist
 echoboard-back-end/.env
+echoboard-back-end/prod-env.yaml
