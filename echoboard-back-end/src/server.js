@@ -46,7 +46,10 @@ let db;
 let client;
 
 async function connect_to_db() {
-    const uri = 'mongodb://127.0.0.1:27017';
+    const uri = process.env.MONGODB_USERNAME
+    ? 'mongodb://127.0.0.1:27017'
+    : `mongodb+srv://echoboard:<db_password>@cluster0.heofhcv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+    
     client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
     try {
         await client.connect();

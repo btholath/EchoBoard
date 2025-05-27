@@ -48,3 +48,6 @@ echoboard-back-end/credentials.json
 
 # You dont need to version control built files
 /dist
+
+echoboard-back-end/dist
+echoboard-back-end/.env

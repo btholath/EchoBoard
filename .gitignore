@@ -47,3 +47,4 @@ echoboard-back-end/credentials.json
 # Ignore specific files in the back-end
 
 echoboard-back-end/dist
+echoboard-back-end/.env

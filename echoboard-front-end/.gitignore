@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+echoboard-front-end/dist
+echoboard-front-end/.env
