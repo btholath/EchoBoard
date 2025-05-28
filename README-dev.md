@@ -383,17 +383,17 @@ Add <your mongosh's download directory>/bin to your $PATH variable. How to
 Show Password
 Use this connection string in your application
 
-mongosh "mongodb+srv://cluster0.heofhcv.mongodb.net/" --apiVersion 1 --username echoboard --password MiL8eFXbyCuQeRHH
+mongosh "mongodb+srv://cluster0.heofhcv.mongodb.net/" --apiVersion 1 --username echoboard --password ********
 
 The password for echoboard is included in the connection string for your first time setup. This password will not be available again after exiting this connect flow.
 RESOURCES
 
 Open the shell in your IDE where your github codespace have been running and enter
-mongosh "mongodb+srv://cluster0.heofhcv.mongodb.net/" --apiVersion 1 --username echoboard --password MiL8eFXbyCuQeRHH
+mongosh "mongodb+srv://cluster0.heofhcv.mongodb.net/" --apiVersion 1 --username echoboard --password ********
 Before you run the above command you need to allow network access from your ide to the mongodb,
 In mongodb dashboard, go to Network Access menu, choose Add IP address and enter 0.0.0.0/0 and set it for a 1 day or 1 week as deemed necessary.
 
-@btholath ➜ /workspaces/EchoBoard (main) $ mongosh "mongodb+srv://cluster0.heofhcv.mongodb.net/" --apiVersion 1 --username echoboard --password MiL8eFXbyCuQeRHH
+@btholath ➜ /workspaces/EchoBoard (main) $ mongosh "mongodb+srv://cluster0.heofhcv.mongodb.net/" --apiVersion 1 --username echoboard --password ********
 Current Mongosh Log ID: 6835fe2dcabe0a378fc59f34
 Connecting to:          mongodb+srv://<credentials>@cluster0.heofhcv.mongodb.net/?appName=mongosh+2.5.1
 Using MongoDB:          8.0.9 (API Version 1)
@@ -427,8 +427,229 @@ mongodb+srv://echoboard:<db_password>@cluster0.heofhcv.mongodb.net/?retryWrites=
 
 
 ### Set environment variables
+create app.yaml and prod-env.yaml
 
-### Deploy application
+### Deploy application for purpose of Google's Firebase
+install gcloud CLI
+https://cloud.google.com/sdk/docs/install
 
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates gnupg curl
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+
+gcloud --version
+@btholath ➜ /workspaces/EchoBoard (main) $ gcloud --version
+Google Cloud SDK 523.0.1
+alpha 2025.05.22
+beta 2025.05.22
+bq 2.1.17
+bundled-python3-unix 3.12.9
+core 2025.05.22
+gcloud-crc32c 1.0.0
+gsutil 5.34
+@btholath ➜ /workspaces/EchoBoard (main) $ 
+sudo apt-get update && sudo apt-get install google-cloud-cli
+
+Now go to Google Cloud https://console.cloud.google.com
+https://console.firebase.google.com/project/echoboard-b994f/settings/serviceaccounts/adminsdk
+https://console.cloud.google.com/welcome?project=echoboard-b994f
+
+@btholath ➜ /workspaces/EchoBoard (main) $ gcloud auth login
+Go to the following link in your browser, and complete the sign-in prompts:
+
+    https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=xizJEfxYT6ntQ0ykSqXjKHuvZxcgE6&prompt=consent&token_usage=remote&access_type=offline&code_challenge=eWuMqGhuk5VeAviHYwiXCZOgQBj8T0AriGWOFa3MZrs&code_challenge_method=S256
+
+Once finished, enter the verification code provided in your browser: 4/0AUJR-x6VfGNS8PwMX1CopJpd8i2fD2ECpAKeMPyXr10uwu-Vb0vlRp-HZePhMVQdw22SFQ
+
+You are now logged in as [biju.tholath@gmail.com].
+Your current project is [None].  You can change this setting by running:
+  $ gcloud config set project PROJECT_ID
+@btholath ➜ /workspaces/EchoBoard (main) $ gcloud config set project echoboard-b994f
+Updated property [core/project].
+@btholath ➜ /workspaces/EchoBoard (main) $ 
+
+
+gcloud config set project PROJECT_ID
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ gcloud config set project echoboard-b994f
+Updated property [core/project].
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ 
+
+
+
+
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ gcloud app deploy
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ gcloud app deploy
+You are creating an app for project [echoboard-b994f].
+WARNING: Creating an App Engine application for a project is irreversible and the region
+cannot be changed. More information about regions is at
+<https://cloud.google.com/appengine/docs/locations>.
+
+WARNING: Starting from March, 2025, App Engine sets the automatic scaling maximum instances
+default for standard environment deployments to 20. This change doesn't impact
+existing apps. To override the default, specify the new max_instances value in your
+app.yaml file, and deploy a new version or redeploy over an existing version.
+For more details on max_instances, see
+<https://cloud.google.com/appengine/docs/standard/reference/app-yaml.md#scaling_elements>.
+
+Please choose the region where you want your App Engine application located:
+
+ [1] asia-east1    (supports standard and flexible)
+ [2] asia-east2    (supports standard and flexible and search_api)
+ [3] asia-northeast1 (supports standard and flexible and search_api)
+ [4] asia-northeast2 (supports standard and flexible and search_api)
+ [5] asia-northeast3 (supports standard and flexible and search_api)
+ [6] asia-south1   (supports standard and flexible and search_api)
+ [7] asia-southeast1 (supports standard and flexible)
+ [8] asia-southeast2 (supports standard and flexible and search_api)
+ [9] australia-southeast1 (supports standard and flexible and search_api)
+ [10] europe-central2 (supports standard and flexible)
+ [11] europe-west   (supports standard and flexible and search_api)
+ [12] europe-west2  (supports standard and flexible and search_api)
+ [13] europe-west3  (supports standard and flexible and search_api)
+ [14] europe-west6  (supports standard and flexible and search_api)
+ [15] northamerica-northeast1 (supports standard and flexible and search_api)
+ [16] southamerica-east1 (supports standard and flexible and search_api)
+ [17] us-central    (supports standard and flexible and search_api)
+ [18] us-east1      (supports standard and flexible and search_api)
+ [19] us-east4      (supports standard and flexible and search_api)
+ [20] us-west1      (supports standard and flexible)
+ [21] us-west2      (supports standard and flexible and search_api)
+ [22] us-west3      (supports standard and flexible and search_api)
+ [23] us-west4      (supports standard and flexible and search_api)
+ [24] cancel
+Please enter your numeric choice:  18
+
+Creating App Engine application in project [echoboard-b994f] and region [us-east1]....done.                                                                                                                                                                   
+Services to deploy:
+
+descriptor:                  [/workspaces/EchoBoard/echoboard-back-end/app.yaml]
+source:                      [/workspaces/EchoBoard/echoboard-back-end]
+target project:              [echoboard-b994f]
+target service:              [default]
+target version:              [20250528t012553]
+target url:                  [https://echoboard-b994f.ue.r.appspot.com]
+target service account:      [echoboard-b994f@appspot.gserviceaccount.com]
+
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ 
+
+
+
+
+--Grant Storage Access to the App Engine default service account
+Use the following gcloud command to assign the required role:
+
+gcloud projects add-iam-policy-binding echoboard-b994f \
+  --member="serviceAccount:echoboard-b994f@appspot.gserviceaccount.com" \
+  --role="roles/storage.admin"
+This gives full access to GCS buckets, which is fine for development. For production, you might prefer using roles/storage.objectAdmin or roles/storage.objectCreator.
+
+Updated IAM policy for project [echoboard-b994f].
+bindings:
+- members:
+  - serviceAccount:service-460081465840@gcp-gae-service.iam.gserviceaccount.com
+  role: roles/appengine.serviceAgent
+- members:
+  - serviceAccount:service-460081465840@gcp-sa-artifactregistry.iam.gserviceaccount.com
+  role: roles/artifactregistry.serviceAgent
+- members:
+  - serviceAccount:460081465840@cloudbuild.gserviceaccount.com
+  role: roles/cloudbuild.builds.builder
+- members:
+  - serviceAccount:service-460081465840@gcp-sa-cloudbuild.iam.gserviceaccount.com
+  role: roles/cloudbuild.serviceAgent
+- members:
+  - serviceAccount:460081465840-compute@developer.gserviceaccount.com
+  - serviceAccount:echoboard-b994f@appspot.gserviceaccount.com
+  role: roles/editor
+- members:
+  - serviceAccount:service-460081465840@gcp-sa-firebase.iam.gserviceaccount.com
+  role: roles/firebase.managementServiceAgent
+- members:
+  - serviceAccount:firebase-adminsdk-fbsvc@echoboard-b994f.iam.gserviceaccount.com
+  role: roles/firebase.sdkAdminServiceAgent
+- members:
+  - serviceAccount:firebase-adminsdk-fbsvc@echoboard-b994f.iam.gserviceaccount.com
+  role: roles/firebaseauth.admin
+- members:
+  - serviceAccount:service-460081465840@gcp-sa-firestore.iam.gserviceaccount.com
+  role: roles/firestore.serviceAgent
+- members:
+  - serviceAccount:firebase-adminsdk-fbsvc@echoboard-b994f.iam.gserviceaccount.com
+  role: roles/iam.serviceAccountTokenCreator
+- members:
+  - user:biju.tholath@gmail.com
+  role: roles/owner
+- members:
+  - serviceAccount:echoboard-b994f@appspot.gserviceaccount.com
+  role: roles/storage.admin
+etag: BwY2KC18ZT4=
+version: 1
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ 
+
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ gcloud app deploy
+
+
+
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ gcloud app deploy
+Services to deploy:
+
+descriptor:                  [/workspaces/EchoBoard/echoboard-back-end/app.yaml]
+source:                      [/workspaces/EchoBoard/echoboard-back-end]
+target project:              [echoboard-b994f]
+target service:              [default]
+target version:              [20250528t013436]
+target url:                  [https://echoboard-b994f.ue.r.appspot.com]
+target service account:      [echoboard-b994f@appspot.gserviceaccount.com]
+
+
+Do you want to continue (Y/n)?  Y
+
+Beginning deployment of service [default]...
+╔════════════════════════════════════════════════════════════╗
+╠═ Uploading 0 files to Google Cloud Storage                ═╣
+╚════════════════════════════════════════════════════════════╝
+File upload done.
+Updating service [default]...done.                                                                                                                                                                                                                            
+Setting traffic split for service [default]...done.                                                                                                                                                                                                           
+Deployed service [default] to [https://echoboard-b994f.ue.r.appspot.com]
+
+You can stream logs from the command line by running:
+  $ gcloud app logs tail -s default
+
+To view your application in the web browser run:
+  $ gcloud app browse
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ 
+
+
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ gcloud app browse
+Did not detect your browser. Go to this link to view your app:
+https://echoboard-b994f.ue.r.appspot.com
+@btholath ➜ /workspaces/EchoBoard/echoboard-back-end (main) $ 
+
+
+
+1. Attach a Billing Account to Your Project
+Go to the Google Cloud Console Billing Page
+https://console.firebase.google.com/?pli=1
+
+Select or create a billing account
+
+Go to Manage Billing Accounts
+
+Click “My projects”
+
+Find your project echoboard-b994f
+
+Click "Change billing account" and link it
+
+2. Enable App Engine Billing API (if prompted)
+Sometimes, Google prompts you to enable related billing services. Approve those if requested.
+
+3. Re-run Deployment
+Once billing is attached:
+
+
+gcloud app deploy
 
 ## Shutdown app in Google cloud.
